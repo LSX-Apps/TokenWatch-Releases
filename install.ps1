@@ -1,4 +1,4 @@
-﻿# Web-Installer fÃ¼r Claude Usage Tray
+# Web-Installer fuer Claude Usage Tray
 $ErrorActionPreference = "Stop"
 
 $ManifestUrl = "https://raw.githubusercontent.com/LSX-Apps/CC-Nutzung-Releases/main/ccusage-manifest.json"
@@ -17,11 +17,11 @@ New-Item -ItemType Directory -Path $tempDir -Force | Out-Null
 $zipPath = Join-Path $tempDir "update.zip"
 Invoke-WebRequest -Uri $downloadUrl -OutFile $zipPath -UseBasicParsing
 
-Write-Host "Entsperre Installationspaket fÃ¼r Smart App Control..." -ForegroundColor Cyan
+Write-Host "Entsperre Installationspaket fuer Smart App Control..." -ForegroundColor Cyan
 try {
     Unblock-File -LiteralPath $zipPath
 } catch {
-    Write-Warning "Konnte Datei nicht entsperren. MÃ¶glicherweise sind Admin-Rechte erforderlich oder Smart App Control blockiert den Vorgang."
+    Write-Warning "Konnte Datei nicht entsperren. Moeglicherweise sind Admin-Rechte erforderlich oder Smart App Control blockiert den Vorgang."
 }
 
 $extractDir = Join-Path $tempDir "extract"
