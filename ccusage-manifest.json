@@ -1,6 +1,6 @@
 {
-    "version":  "0.2.8",
-    "download_url":  "https://github.com/LSX-Apps/CC-Nutzung-Releases/releases/download/v0.2.8/ClaudeUsageTray-0.2.8.zip",
-    "sha256":  "a4c7dfc53762892b8d9d11e5e007ecda29a3b2559da39bc7f9dfb54be2330735",
+    "version":  "0.2.9",
+    "download_url":  "https://github.com/LSX-Apps/CC-Nutzung-Releases/releases/download/v0.2.9/ClaudeUsageTray-0.2.9.zip",
+    "sha256":  "2069801e1dde8afbe765680cd877ee577b4639843ffe1068781cc7d478d0d244",
     "notes":  "Neue Version von Claude Usage Tray."
 }
