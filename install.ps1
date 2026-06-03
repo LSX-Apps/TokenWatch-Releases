@@ -4,7 +4,12 @@ $ErrorActionPreference = "Stop"
 $ManifestUrl = "https://raw.githubusercontent.com/LSX-Apps/CC-Nutzung-Releases/main/ccusage-manifest.json?t=" + [Guid]::NewGuid().ToString("N")
 Write-Host "Lade App-Informationen von GitHub..." -ForegroundColor Cyan
 
-$manifest = Invoke-RestMethod -Uri $ManifestUrl -UseBasicParsing
+$response = Invoke-RestMethod -Uri $ManifestUrl -UseBasicParsing
+$manifest = $response
+if ($response -is [string]) {
+    $cleanJson = $response.Trim().Trim([char]65279)
+    $manifest = $cleanJson | ConvertFrom-Json
+}
 $latestVersion = $manifest.version
 $downloadUrl = $manifest.download_url
 
