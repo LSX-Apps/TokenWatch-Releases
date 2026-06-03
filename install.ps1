@@ -57,9 +57,10 @@ Get-ChildItem -Path $source -Recurse | ForEach-Object {
 
 Write-Host "Starte Setup-Assistenten..." -ForegroundColor Green
 
-# Launch the wizard in a separate process and let it run
+# Launch the wizard in a separate process and let it run completely silently in the background
 Start-Process -FilePath "$env:WINDIR\System32\WindowsPowerShell\v1.0\powershell.exe" -ArgumentList @(
     "-NoProfile",
     "-ExecutionPolicy", "Bypass",
+    "-WindowStyle", "Hidden",
     "-File", $wizard
-)
+) -WindowStyle Hidden
