@@ -1,0 +1,5 @@
+﻿{
+    "update_manifest_url":  "https://raw.githubusercontent.com/LSX-Apps/CC-Nutzung-Releases/main/ccusage-manifest.json",
+    "poll_interval_seconds":  300,
+    "read_interval_seconds":  30
+}
