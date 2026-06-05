@@ -1,0 +1,6 @@
+{
+  "version": "0.1.3",
+  "download_url": "https://github.com/LSX-Apps/TokenWatch-Releases/releases/download/mac-v0.1.3/TokenWatch-0.1.3.zip",
+  "sha256": "9de3bbd2a3e5a4eb3f8454c53d9b1cc7cd955d18da9df60cbcba8c9f13c6e179",
+  "notes": "Update-Pruefung repariert (macOS-Manifest war nicht erreichbar) und klarere Fehlermeldung bei fehlender Verbindung."
+}
