@@ -1,6 +1,6 @@
 {
-  "version": "0.1.4",
-  "download_url": "https://github.com/LSX-Apps/TokenWatch-Releases/releases/download/mac-v0.1.4/TokenWatch-0.1.4.zip",
-  "sha256": "16719ae0b56cb224b565810e192f871dc029683b92f94a9e423ee567eb4e349d",
-  "notes": "Update-Dialog mit Sp\u00e4ter-Option und neuer Schalter Updates automatisch installieren."
+  "version": "0.2.0",
+  "download_url": "https://github.com/LSX-Apps/TokenWatch-Releases/releases/download/mac-v0.2.0/TokenWatch-0.2.0.zip",
+  "sha256": "80b8f18e944b95115c6a73061407c4692a6f966ffd8751478cd6a55c3f74b43b",
+  "notes": "Neue vereinheitlichte App (Mac + Windows aus einem Codebase) mit Anfaenger-Einrichtung, Einstellungsfenster und Tastenkuerzel."
 }
