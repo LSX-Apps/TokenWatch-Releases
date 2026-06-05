@@ -1,7 +1,13 @@
-# Web-Installer fuer Claude Usage Tray
+# Web-Installer fuer TokenWatch (vereinheitlichte Tauri-App)
+#
+# Einzeiler-Installation:
+#   irm https://raw.githubusercontent.com/LSX-Apps/TokenWatch-Releases/main/install.ps1 | iex
+#
+# Laedt den neuesten Windows-Installer (.exe) herunter, entfernt das Internet-Flag
+# (Mark of the Web / Smart App Control) und startet die Installation still.
 $ErrorActionPreference = "Stop"
 
-$ManifestUrl = "https://raw.githubusercontent.com/LSX-Apps/CC-Nutzung-Releases/main/ccusage-manifest.json?t=" + [Guid]::NewGuid().ToString("N")
+$ManifestUrl = "https://raw.githubusercontent.com/LSX-Apps/TokenWatch-Releases/main/tokenwatch-manifest.json?t=" + [Guid]::NewGuid().ToString("N")
 Write-Host "Lade App-Informationen von GitHub..." -ForegroundColor Cyan
 
 $response = Invoke-RestMethod -Uri $ManifestUrl -UseBasicParsing
@@ -11,56 +17,37 @@ if ($response -is [string]) {
     $manifest = $cleanJson | ConvertFrom-Json
 }
 $latestVersion = $manifest.version
-$downloadUrl = $manifest.download_url
+$downloadUrl   = $manifest.download_url
+$expectedSha   = $manifest.sha256
+
+if (-not $downloadUrl) { throw "Manifest enthaelt keine download_url." }
 
 Write-Host "Neueste Version gefunden: v$latestVersion" -ForegroundColor Green
 Write-Host "Lade Installationspaket herunter..." -ForegroundColor Cyan
 
-$tempDir = Join-Path $env:TEMP ("ClaudeUsageTrayInstall-" + [Guid]::NewGuid().ToString("N"))
+$tempDir = Join-Path $env:TEMP ("TokenWatchInstall-" + [Guid]::NewGuid().ToString("N"))
 New-Item -ItemType Directory -Path $tempDir -Force | Out-Null
+$setupPath = Join-Path $tempDir "TokenWatch-Setup.exe"
 
-$zipPath = Join-Path $tempDir "update.zip"
-Invoke-WebRequest -Uri $downloadUrl -OutFile $zipPath -UseBasicParsing
+Invoke-WebRequest -Uri $downloadUrl -OutFile $setupPath -UseBasicParsing
 
 Write-Host "Entsperre Installationspaket fuer Smart App Control..." -ForegroundColor Cyan
-try {
-    Unblock-File -LiteralPath $zipPath
-} catch {
-    Write-Warning "Konnte Datei nicht entsperren. Moeglicherweise sind Admin-Rechte erforderlich oder Smart App Control blockiert den Vorgang."
+try { Unblock-File -LiteralPath $setupPath } catch {
+    Write-Warning "Konnte Datei nicht entsperren (ggf. Admin-Rechte noetig)."
 }
 
-$extractDir = Join-Path $tempDir "extract"
-New-Item -ItemType Directory -Path $extractDir -Force | Out-Null
-
-Write-Host "Entpacke Dateien..." -ForegroundColor Cyan
-Expand-Archive -LiteralPath $zipPath -DestinationPath $extractDir -Force
-
-$source = $extractDir
-if (!(Test-Path -LiteralPath (Join-Path $source "ccusage-setup-wizard.ps1"))) {
-    $candidate = Get-ChildItem -LiteralPath $extractDir -Directory | Where-Object {
-        Test-Path -LiteralPath (Join-Path $_.FullName "ccusage-setup-wizard.ps1")
-    } | Select-Object -First 1
-    if ($candidate) {
-        $source = $candidate.FullName
+if ($expectedSha) {
+    $actual = (Get-FileHash -LiteralPath $setupPath -Algorithm SHA256).Hash.ToLower()
+    if ($actual -ne $expectedSha.ToLower()) {
+        throw "SHA256 passt nicht (erwartet $expectedSha, bekommen $actual)."
     }
+    Write-Host "SHA256 ok" -ForegroundColor DarkGray
 }
 
-$wizard = Join-Path $source "ccusage-setup-wizard.ps1"
-if (!(Test-Path -LiteralPath $wizard)) {
-    throw "Setup-Assistent (ccusage-setup-wizard.ps1) wurde im Installationspaket nicht gefunden."
-}
+Write-Host "Starte Installation..." -ForegroundColor Green
+# Tauri/NSIS-Installer: /S = still installieren.
+Start-Process -FilePath $setupPath -ArgumentList "/S" -Wait
 
-# Unblock all extracted files to be absolutely sure Smart App Control doesn't block them
-Get-ChildItem -Path $source -Recurse | ForEach-Object {
-    try { Unblock-File -LiteralPath $_.FullName } catch {}
-}
-
-Write-Host "Starte Setup-Assistenten..." -ForegroundColor Green
-
-# Launch the wizard in a separate process and let it run completely silently in the background
-Start-Process -FilePath "$env:WINDIR\System32\WindowsPowerShell\v1.0\powershell.exe" -ArgumentList @(
-    "-NoProfile",
-    "-ExecutionPolicy", "Bypass",
-    "-WindowStyle", "Hidden",
-    "-File", $wizard
-) -WindowStyle Hidden
+Write-Host ""
+Write-Host "Fertig. TokenWatch erscheint im Startmenue und im Infobereich (Tray)." -ForegroundColor Green
+Write-Host "Beim ersten Start fuehrt dich die App durch die Einrichtung." -ForegroundColor Green

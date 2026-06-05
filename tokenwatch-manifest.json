@@ -1,6 +1,6 @@
 {
-  "version": "0.2.18",
-  "download_url": "https://github.com/LSX-Apps/TokenWatch-Releases/releases/download/win-v0.2.18/TokenWatch-0.2.18.zip",
-  "sha256": "a5492c8392ffef2697686cc911b30edddc203ea29f6861d8cda8aa600a627b07",
-  "notes": "Update-Dialog mit Spaeter-Option und neuer Schalter zum automatischen Installieren von Updates."
+  "version": "0.3.0",
+  "download_url": "https://github.com/LSX-Apps/TokenWatch-Releases/releases/download/v0.3.0/TokenWatch-0.3.0-setup.exe",
+  "sha256": "38c92207cff15a4833eeab84f992a53ba1d0a5ea147ac3b42a80e4783a72df87",
+  "notes": "TokenWatch v0.3.0 — vereinheitlichte App (Mac + Windows)."
 }
